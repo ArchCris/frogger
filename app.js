@@ -9,6 +9,7 @@ const carsLeft = document.querySelectorAll('.car-left')
 const carsRight = document.querySelectorAll('.car-rigth')
 let totalTime = 20;
 let timer;
+let timerOutcome;
 
 /*Movement frog function*/
 timeLeftDisplay.textContent = totalTime
@@ -33,7 +34,7 @@ function moveFrog(e) {
     squares[currentIndex].classList.add('frog')
 }
  
-document.addEventListener("keyup", moveFrog)
+
 
 /*Movement logs function*/
 
@@ -44,6 +45,9 @@ function autoMoveObjects() {
     logsRight.forEach(logsRight => moveLogRight(logsRight))
     carsLeft.forEach(carsLeft => moveCarsLeft(carsLeft))
     carsRight.forEach(carsRight => moveCarsRight(carsRight))
+}
+
+function checkOutcome() {
     lose()
     win()
 }
@@ -52,23 +56,39 @@ function lose() {
     if (squares[currentIndex].classList.contains('c1') ||
         squares[currentIndex].classList.contains('l4') ||
         squares[currentIndex].classList.contains('l5') ||
-        totalTime <=ls 0
+        totalTime <= 0
     ) {
         squares[currentIndex].classList.remove('frog')
-        clearInterval(timer)
+        clearInterval(timer);
+        clearInterval(timerOutcome);
         document.removeEventListener("keyup", moveFrog)
-        resultDisplay.textContent='Perdiste pa'
+        resultDisplay.textContent='You lose'
     }
 }
 
 function win() {
     if (squares[currentIndex].classList.contains('ending-block')
     ) {
-        clearInterval(timer)
+        clearInterval(timer);
+        clearInterval(timerOutcome);
         document.removeEventListener("keyup", moveFrog)
-        resultDisplay.textContent='Ganaste pa'
+        resultDisplay.textContent='You win'
     }
 }
+
+startPauseButton.addEventListener("click",()=> {
+    if(timer) {
+        clearInterval(timer);
+        clearInterval(timerOutcome);
+        document.removeEventListener("keyup", moveFrog)
+        timer = null;
+        timerOutcome = null;
+    }else{
+        timer = setInterval(autoMoveObjects, 1000);
+        timerOutcome = setInterval(checkOutcome, 50);
+        document.addEventListener("keyup", moveFrog)
+    }
+})
 
 function moveLogLeft(logsLeft){
     switch (true) {
@@ -154,5 +174,5 @@ function moveCarsRight(carsRight){
     }
 }
 
-timer = setInterval(autoMoveObjects, 1000)
+
 
